@@ -1,8 +1,6 @@
-#include <algorithm>
 #include <cstdio>
 #include <iostream>
 #include <vector>
-#define K 21
 
 using namespace std;
 
@@ -19,28 +17,28 @@ template <typename T> void read(T &x) {
 }
 
 class Solution {
-  vector<vector<int>> adj, parent;
-  vector<int> depth, ac, bc;
-  void dfs(int u, int p) {
-    parent[u][0] = p;
-    depth[u] = depth[p] + 1;
-    for (int i = 1; i < K; ++i)
-      parent[u][i] = parent[parent[u][i - 1]][i - 1];
+  int n, a, b;
+  vector<vector<int>> adj;
+  vector<int> pa, pb, ac, bc;
+  void dfs(int u, vector<int> &path) {
+    int l = path.size();
+    if (l >= a)
+      pa[u] = path[l - a];
+    if (l >= b)
+      pb[u] = path[l - b];
+    path.emplace_back(u);
+    ac[u] = 1, bc[u] = 1;
     for (int v : adj[u])
-      dfs(v, u);
-  }
-
-  int walk(int u, int d) {
-    for (int k = K - 1; k >= 0; --k) {
-      if (d & (1 << k))
-        u = parent[u][k];
-    }
-    return u;
+      dfs(v, path);
+    path.pop_back();
+    if (pa[u] > 0)
+      ac[pa[u]] += ac[u];
+    if (pb[u] > 0)
+      bc[pb[u]] += bc[u];
   }
 
 public:
   void solve(int case_num) {
-    int n, a, b;
     read(n), read(a), read(b);
     adj = vector<vector<int>>(n + 1);
     for (int i = 2; i <= n; ++i) {
@@ -48,23 +46,12 @@ public:
       read(v);
       adj[v].emplace_back(i);
     }
-    parent = vector<vector<int>>(n + 1, vector<int>(K));
-    depth = vector<int>(n + 1);
-    dfs(1, 0);
-    vector<int> ac(n + 1, 1), bc(n + 1, 1);
-    vector<int> order(n);
-    for (int i = 0; i < n; ++i)
-      order[i] = i + 1;
-    sort(order.begin(), order.end(),
-         [&](int i, int j) { return depth[i] > depth[j]; });
-    for (int i : order) {
-      int ua = walk(i, a);
-      if (ua > 0)
-        ac[ua] += ac[i];
-      int ub = walk(i, b);
-      if (ub > 0)
-        bc[ub] += bc[i];
-    }
+    pa = vector<int>(n + 1);
+    pb = vector<int>(n + 1);
+    ac = vector<int>(n + 1);
+    bc = vector<int>(n + 1);
+    vector<int> path;
+    dfs(1, path);
     double ans = 0;
     for (int i = 1; i <= n; ++i) {
       ans += (double)(ac[i] + bc[i]) * n;

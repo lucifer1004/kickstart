@@ -15,11 +15,9 @@ Simple DP. $O(P^2K)$, where $P=4$ in this problem.
 
 ## Problem C - Beauty of Tree
 
-Inclusion-exclusion, binary lifting and topological sorting.
+Inclusion-exclusion, DFS.
 
-We need to find, for every node, the number of descendants has a distance that can be divided by $A$, and similar for $B$. This can be done by going up from the current node. Supposing we are currently at node $u$, we go up $A$ steps and reach node $va$, then we can add $ca[u]$ to $ca[va]$. Similarly, we can add $cb[u]$ to $cb[vb]$. The process of going up can be done in $O(\log N)$ via binary lifting. So for all nodes, we need $O(N\log N)$.
-
-Topological sort is $O(N)$. My implementation simply sorted all the nodes by depth in the descending order (which is definitely a valid topological order, because this is a rooted tree), so the time complexity for sorting becomes $O(N\log N)$.
+We need to find, for every node, the number of descendants has a distance that can be divided by $A$, and similar for $B$. This can be done during DFS if we keep a record of the current path.
 
 After having $ca[i]$ and $cb[i]$, we can simply calculate how many times the current node will be counted, via inclusion-exclusion:
 
@@ -27,7 +25,7 @@ $$t[i]=(ca[i]+cb[i])\cdot N-ca[i]\cdot cb[i]$$
 
 Then we add up all the results, and divide it by $N^2$.
 
-The total time complexity is $O(N\log N)$.
+The total time complexity is $O(N)$.
 
 ## Problem D - Locked Doors
 
