@@ -20,17 +20,10 @@ class Solution {
         break;
       } else {
         ans += five[n - i] * a[c];
+        if (i == n)
+          ans++;
       }
     }
-    bool self = true;
-    for (int i = 1; i <= n; ++i) {
-      if ((s[i - 1] - '0') % 2 != i % 2) {
-        self = false;
-        break;
-      }
-    }
-    if (self)
-      ans++;
     return ans;
   }
 
