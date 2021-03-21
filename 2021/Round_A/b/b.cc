@@ -27,39 +27,39 @@ public:
     for (int i = 0; i < r; ++i)
       for (int j = 0; j < c; ++j)
         read(m[i][j]);
-    vector<vector<int>> lr(r, vector<int>(c));
-    vector<vector<int>> rl(r, vector<int>(c));
-    vector<vector<int>> ud(r, vector<int>(c));
-    vector<vector<int>> du(r, vector<int>(c));
+    vector<vector<int>> W(r, vector<int>(c));
+    vector<vector<int>> E(r, vector<int>(c));
+    vector<vector<int>> N(r, vector<int>(c));
+    vector<vector<int>> S(r, vector<int>(c));
     for (int i = 0; i < r; ++i) {
       for (int j = 0; j < c; ++j) {
         if (m[i][j]) {
-          lr[i][j] = 1;
+          W[i][j] = 1;
           if (j >= 1)
-            lr[i][j] += lr[i][j - 1];
+            W[i][j] += W[i][j - 1];
         }
       }
       for (int j = c - 1; j >= 0; --j) {
         if (m[i][j]) {
-          rl[i][j] = 1;
+          E[i][j] = 1;
           if (j + 1 < c)
-            rl[i][j] += rl[i][j + 1];
+            E[i][j] += E[i][j + 1];
         }
       }
     }
     for (int j = 0; j < c; ++j) {
       for (int i = 0; i < r; ++i) {
         if (m[i][j]) {
-          ud[i][j] = 1;
+          N[i][j] = 1;
           if (i >= 1)
-            ud[i][j] += ud[i - 1][j];
+            N[i][j] += N[i - 1][j];
         }
       }
       for (int i = r - 1; i >= 0; --i) {
         if (m[i][j]) {
-          du[i][j] = 1;
+          S[i][j] = 1;
           if (i + 1 < r)
-            du[i][j] += du[i + 1][j];
+            S[i][j] += S[i + 1][j];
         }
       }
     }
@@ -67,14 +67,14 @@ public:
     ll ans = 0;
     for (int i = 0; i < r; ++i)
       for (int j = 0; j < c; ++j) {
-        ans += max(0, min(lr[i][j], ud[i][j] / 2) - 1);
-        ans += max(0, min(lr[i][j] / 2, ud[i][j]) - 1);
-        ans += max(0, min(lr[i][j], du[i][j] / 2) - 1);
-        ans += max(0, min(lr[i][j] / 2, du[i][j]) - 1);
-        ans += max(0, min(rl[i][j], ud[i][j] / 2) - 1);
-        ans += max(0, min(rl[i][j] / 2, ud[i][j]) - 1);
-        ans += max(0, min(rl[i][j], du[i][j] / 2) - 1);
-        ans += max(0, min(rl[i][j] / 2, du[i][j]) - 1);
+        ans += max(0, min(W[i][j], N[i][j] / 2) - 1);
+        ans += max(0, min(W[i][j] / 2, N[i][j]) - 1);
+        ans += max(0, min(W[i][j], S[i][j] / 2) - 1);
+        ans += max(0, min(W[i][j] / 2, S[i][j]) - 1);
+        ans += max(0, min(E[i][j], N[i][j] / 2) - 1);
+        ans += max(0, min(E[i][j] / 2, N[i][j]) - 1);
+        ans += max(0, min(E[i][j], S[i][j] / 2) - 1);
+        ans += max(0, min(E[i][j] / 2, S[i][j]) - 1);
       }
 
     printf("%lld\n", ans);
