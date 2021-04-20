@@ -1,4 +1,4 @@
-# Google Kick Start 2021 Round B
+# Google Kick Start 2021 Round A
 
 - [x] A
 - [x] B
